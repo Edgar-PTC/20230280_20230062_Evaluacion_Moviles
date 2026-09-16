@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
             navigation.navigate('Principal');
         } catch (error) {
             console.error('Error al iniciar sesion', error.code);
-            Alert.alert('No se pudo entrar', error.code);
+            Alert.alert('No se pudo entrar', mensajeError(error.code));
         } finally {
             setCargando(false);
         }
@@ -34,7 +34,7 @@ const Login = ({ navigation }) => {
 
     return(
         <ScrollView className="bg-platinum flex-1 p-10" contentContainerClassName="flex-1 items-center justify-center">
-            <View className="bg-stormyTeal/30 w-full p-10 h-100 flex border border-shadowGrey rounded-xl flex-col items-center justify-center gap-4">
+            <View className="bg-stormyTeal/30 w-full p-10 h-100 flex rounded-xl flex-col items-center justify-center gap-4">
                 <View className="flex flex-col gap-2 items-center justify-center">
                     <User color={"#000000"} size={30} />
                     <Text className="text-2xl font-bold text-center">Login</Text>
@@ -43,7 +43,7 @@ const Login = ({ navigation }) => {
                 <View className="w-full px-4">
                     <Text className="text-base mb-2 text-[#333]">Email:</Text>
                     <TextInput
-                        className="h-10 border border-[#ccc] rounded pl-2 bg-white w-full shadow-sm rounded-xl"
+                        className="h-13 border border-[#ccc] rounded pl-2 bg-white w-full shadow-sm rounded-xl"
                         autoCapitalize="none"
                         keyboardType="email-address"
                         onChangeText={text => setUsuario({ ...Usuario, email: text })}
@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
                 <View className="w-full px-4 mb-5">
                     <Text className="text-base mb-2 text-[#333]">Contraseña:</Text>
                     <TextInput
-                        className="h-10 border border-[#ccc] rounded pl-2 bg-white w-full shadow-sm rounded-xl"
+                        className="h-13 border border-[#ccc] rounded pl-2 bg-white w-full shadow-sm rounded-xl"
                         secureTextEntry
                         onChangeText={text => setUsuario({ ...Usuario, contraseña: text })}
                         value={Usuario.contraseña}
@@ -77,5 +77,13 @@ const Login = ({ navigation }) => {
         </ScrollView>
     )
 }
+
+const mensajeError = (code) => ({
+    'auth/invalid-email': 'El email no es válido',
+    'auth/invalid-credential': 'Email o contraseña incorrectos',
+    'auth/user-not-found': 'No existe una cuenta con ese email',
+    'auth/wrong-password': 'Contraseña incorrecta',
+    'auth/configuration-not-found': 'Falta habilitar Email/Password en Firebase Console (Authentication > Sign-in method)',
+}[code] || 'Ocurrió un error, intenta de nuevo');
 
 export default Login;
