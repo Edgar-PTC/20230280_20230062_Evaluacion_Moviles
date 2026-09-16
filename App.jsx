@@ -7,6 +7,8 @@ import { NavigationRef } from "./src/Navigation/NavigationRef";
 
 //NativeWind: se importa la hoja de estilos base una sola vez, en la raiz real de la app
 import "./global.css";
+import Login from "./src/screens/Login";
+import Usuarios from "./src/screens/Usuarios";
 
 //Se invoca la funcion para obtener el objeto con los componentes Navigator y Screen del stack
 const Stack = createNativeStackNavigator();
@@ -14,11 +16,11 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer ref={navigationRef}>
+            <NavigationContainer ref={NavigationRef}>
                 <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Dashboard" component={Login} />
-                    <Stack.Screen name="Usuarios" component={Login} />
+                    <Stack.Screen name="Usuarios" component={Usuarios} />
                 </Stack.Navigator>
             </NavigationContainer>
         </GestureHandlerRootView>
