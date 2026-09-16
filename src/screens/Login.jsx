@@ -1,37 +1,10 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { User, UserPlus, LogIn } from 'lucide-react-native';
+import { useAuth } from '../context/AuthContext';
 
 const Login = ({ navigation }) => {
-
-    // Estado local con los valores que el usuario escribe en el formulario
-    const [Usuario, setUsuario] = useState({
-        email: '',
-        contraseña: '',
-    });
-    // Deshabilita el boton mientras se espera la respuesta de Firebase, para evitar envios duplicados
-    const [cargando, setCargando] = useState(false);
-
-    // Verifica las credenciales contra Firebase Authentication
-    const iniciarSesion = async () => {
-        if (!Usuario.email || !Usuario.contraseña) {
-            Alert.alert('Faltan datos', 'Escribe email y contraseña');
-            return;
-        }
-        try {
-            setCargando(true);
-            await signInWithEmailAndPassword(auth, Usuario.email.trim(), Usuario.contraseña);
-            navigation.navigate('Principal');
-        } catch (error) {
-            console.error('Error al iniciar sesion', error.code);
-            Alert.alert('No se pudo entrar', mensajeError(error.code));
-        } finally {
-            setCargando(false);
-        }
-    };
-
+    const { cargando, iniciarSesion, Usuario, setUsuario } = useAuth();
+    
     return(
         <ScrollView className="bg-platinum flex-1 p-10" contentContainerClassName="flex-1 items-center justify-center">
             <View className="bg-stormyTeal/30 w-full p-10 h-100 flex rounded-xl flex-col items-center justify-center gap-4">
@@ -77,13 +50,5 @@ const Login = ({ navigation }) => {
         </ScrollView>
     )
 }
-
-const mensajeError = (code) => ({
-    'auth/invalid-email': 'El email no es válido',
-    'auth/invalid-credential': 'Email o contraseña incorrectos',
-    'auth/user-not-found': 'No existe una cuenta con ese email',
-    'auth/wrong-password': 'Contraseña incorrecta',
-    'auth/configuration-not-found': 'Falta habilitar Email/Password en Firebase Console (Authentication > Sign-in method)',
-}[code] || 'Ocurrió un error, intenta de nuevo');
 
 export default Login;

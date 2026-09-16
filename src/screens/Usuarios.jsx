@@ -1,56 +1,13 @@
 // Importación de bibliotecas y componentes necesarios
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, database } from '../config/firebase';
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { UserPlus } from 'lucide-react-native';
+import { useAuth } from '../context/AuthContext';
 
 const Usuarios = ({ navigation }) => {
-    // Estado local con los valores del formulario de registro
-    const [Usuario, setUsuario] = useState({
-        nombre: '',
-        carnet: '',
-        fecha: '',
-        urlImagen: '',
-        email: '',
-        contraseña: '',
-    });
-    // Deshabilita el boton mientras se espera la respuesta de Firebase, para evitar envios duplicados
-    const [cargando, setCargando] = useState(false);
-
+    const { cargando, Usuario, setUsuario, agregarUsuario } = useAuth();
     // Función para navegar a la pantalla de inicio
     const goToHome = () => {
         navigation.goBack();
-    };
-
-    // Crea la cuenta en Firebase Authentication y guarda el perfil (nombre) en Firestore
-    const agregarUsuario = async () => {
-        if (!Usuario.nombre || !Usuario.email || !Usuario.contraseña) {
-            Alert.alert('Faltan datos', 'Completa nombre, email y contraseña');
-            return;
-        }
-        try {
-            setCargando(true);
-            // Crea las credenciales de acceso. Esto tambien inicia sesion automaticamente
-            const cred = await createUserWithEmailAndPassword(auth, Usuario.email.trim(), Usuario.contraseña);
-
-            // Guarda el perfil (nombre) en Firestore, asociado al uid del usuario recien creado
-            await setDoc(doc(database, 'usuarios', cred.user.uid), {
-                nombre: Usuario.nombre.trim(),
-                email: Usuario.email.trim(),
-                creado: new Date(),
-            });
-
-            console.log('Perfil creado para', cred.user.uid);
-            navigation.navigate('Principal');
-            // No hace falta navegar: al iniciar sesion automaticamente, App.jsx detecta las credenciales y muestra Main
-        } catch (error) {
-            console.error('Error al crear el usuario', error.code);
-            Alert.alert('No se pudo crear el perfil', mensajeError(error.code));
-        } finally {
-            setCargando(false);
-        }
     };
 
     return (
@@ -129,10 +86,4 @@ const Usuarios = ({ navigation }) => {
     );
 }
 
-const mensajeError = (codigo) => ({
-    'auth/email-already-in-use': 'El email ya está en uso',
-    'auth/invalid-email': 'El email no es válido',
-    'auth/weak-password': 'La contraseña necesita almenos 6 caracteres',
-    'auth/operation-not-allowed': 'El tipo de autenticación no está habilitado',    
-}[codigo] || 'Error desconocido, intentalo de nuevo');
 export default Usuarios;
