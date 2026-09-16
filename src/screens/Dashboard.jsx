@@ -49,7 +49,7 @@ const Dashboard = ({ navigation }) => {
                     <Text className="text-xl text-platinum">20230280</Text>
                 </View>
             </View>
-            <TouchableOpacity className="bg-vibrantCoral rounded-xl flex flex-row justify-center items-center p-2 gap-4 mb-5">
+            <TouchableOpacity className="bg-vibrantCoral rounded-xl flex flex-row justify-center items-center p-2 gap-4 mb-5" onPress={() => navigation.navigate("Login")}>
                 <LogOut color={"#ffffff"} size={30} />
                 <Text className="text-platinum text-xl">Cerrar Sesion</Text>
             </TouchableOpacity>

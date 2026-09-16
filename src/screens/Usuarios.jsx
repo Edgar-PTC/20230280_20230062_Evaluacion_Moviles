@@ -43,6 +43,7 @@ const Usuarios = ({ navigation }) => {
             });
 
             console.log('Perfil creado para', cred.user.uid);
+            navigation.navigate('Principal');
             // No hace falta navegar: al iniciar sesion automaticamente, App.jsx detecta las credenciales y muestra Main
         } catch (error) {
             console.error('Error al crear el usuario', error.code);

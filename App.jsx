@@ -18,7 +18,7 @@ export default function App() {
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer ref={NavigationRef}>
-                <Stack.Navigator initialRouteName="Dashboard" screenOptions={{ headerShown: false }}>
+                <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Dashboard" component={Dashboard} />
                     <Stack.Screen name="Usuarios" component={Usuarios} />
