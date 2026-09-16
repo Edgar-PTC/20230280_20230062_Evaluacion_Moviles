@@ -129,4 +129,10 @@ const Usuarios = ({ navigation }) => {
     );
 }
 
+const mensajeError = (codigo) => ({
+    'auth/email-already-in-use': 'El email ya está en uso',
+    'auth/invalid-email': 'El email no es válido',
+    'auth/weak-password': 'La contraseña necesita almenos 6 caracteres',
+    'auth/operation-not-allowed': 'El tipo de autenticación no está habilitado',    
+}[codigo] || 'Error desconocido, intentalo de nuevo');
 export default Usuarios;
